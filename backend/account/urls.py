@@ -2,8 +2,17 @@ from django.contrib import admin
 from django.urls import include, path
 from account import views
 from rest_framework_simplejwt.views import TokenRefreshView
+from rest_framework.routers import DefaultRouter
+from account.views import DiseaseViewSet, TreatmentViewSet
+
+router = DefaultRouter()
+
+router.register(r"diseases", DiseaseViewSet, basename="disease")
+router.register(r"treatments", TreatmentViewSet, basename="treatment")
+
 
 urlpatterns = [
+    path("", include(router.urls)),
     path("register/", views.register_view, name="register"),
     path("login/", views.login_view, name="login"),
     path("logout/", views.logout_view, name="logout"),
@@ -11,5 +20,5 @@ urlpatterns = [
     path("me/update/", views.me_update_view, name="me_update"),
     path("profile_list/", views.profile_list_view, name="profile_list"),
     path("delete_profile/<int:pk>/", views.delete_user_view, name="delete_profile"),
-    path("token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
+    path("token/refresh/", TokenRefreshView.as_view(), name="token_refresh")
 ]

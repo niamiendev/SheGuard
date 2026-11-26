@@ -1,4 +1,5 @@
 from tokenize import TokenError
+from rest_framework.viewsets import ModelViewSet
 
 from django.shortcuts import get_object_or_404, render
 from rest_framework.response import Response
@@ -7,8 +8,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from account.models import Profile
-from account.serializers import ProfileSerializer, UserSerializer
+from account.models import Disease, Profile, Treatment
+from account.serializers import DiseaseSerializer, ProfileSerializer, TreatmentSerializer, UserSerializer
 from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.models import User
@@ -256,4 +257,27 @@ def delete_user_view(request, pk):
         },
         status=status.HTTP_200_OK
     )
-    
+
+class DiseaseViewSet(ModelViewSet):
+    serializer_class = DiseaseSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Disease.objects.filter(
+            profile=self.request.user.profile
+        ).order_by("-created_at")
+
+    def perform_create(self, serializer):
+        serializer.save(profile=self.request.user.profile)
+        
+class TreatmentViewSet(ModelViewSet):
+    serializer_class = TreatmentSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Treatment.objects.filter(
+            profile=self.request.user.profile
+        ).order_by("-created_at")
+
+    def perform_create(self, serializer):
+        serializer.save(profile=self.request.user.profile)
