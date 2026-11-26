@@ -37,3 +37,12 @@ class IsOperator(HasRole):
 
 class IsVictim(HasRole):
     allowed_roles = ["VICTIM"]
+    
+    
+class IsVictimOrOperator(HasRole):
+    allowed_roles = [
+        "SUPERADMIN",
+        "ADMIN",
+        "OPERATEUR",
+        "VICTIM",
+    ]

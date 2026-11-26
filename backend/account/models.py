@@ -48,7 +48,7 @@ class Profile(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     
 
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
     
     
     def __set__(self, instance, value):
