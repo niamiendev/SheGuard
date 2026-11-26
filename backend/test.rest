@@ -1,0 +1,69 @@
+
+@baseUrl = http://127.0.0.1:8000/api/account
+@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzk1Njk4MjU4LCJpYXQiOjE3OTU2OTczNTgsImp0aSI6IjU1Y2Y2NGM0Nzc4MDRhNjY5OTJkMzc0NGExNGU5MTIyIiwidXNlcl9pZCI6IjEifQ.0BzltIwydna60xoxS3pkpFwx1Mr5uZgDqVCC87jDIVI
+@refreshToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc5NjMwMjE1OCwiaWF0IjoxNzk1Njk3MzU4LCJqdGkiOiI5YzFiMWY2ZWYxYzM0ODkzOGYzYzBlMjY2YWNlZTVmYSIsInVzZXJfaWQiOiIxIn0.jfBIbDqk5UQFHKr2gfz2eADGlijbrWc1-Q97Kz6bWms
+
+### 1. INSCRIPTION
+POST {{baseUrl}}/register/
+Content-Type: application/json
+
+{
+    "username": "jean",
+    "email": "jean@gmail.com",
+    "password": "123456789",
+    "profile": {
+        "fullname": "Jean Niamien"
+    }
+}
+
+### 2. CONNEXION
+POST {{baseUrl}}/login/
+Content-Type: application/json
+
+{
+    "email": "jean@gmail.com",
+    "password": "123456789"
+}
+
+### 3. CONSULTER SON PROFIL
+GET {{baseUrl}}/me/
+Authorization: Bearer {{accessToken}}
+
+### 4. MODIFIER SON PROFIL
+PATCH {{baseUrl}}/me/update/
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+    "fullname": "Jean Niamien",
+    "phone": "+2250700000000",
+    "country": "Côte d'Ivoire",
+    "city": "Abidjan",
+    "address": "Cocody",
+    "blood": "O_POS"
+}
+
+### 5. CONSULTER LA LISTE DES PROFILS
+GET {{baseUrl}}/profile_list/
+Authorization: Bearer {{accessToken}}
+
+### 6. RENOUVELER LE TOKEN
+POST {{baseUrl}}/token/refresh/
+Content-Type: application/json
+
+{
+    "refresh": "{{refreshToken}}"
+}
+
+### 7. SE DÉCONNECTER
+POST {{baseUrl}}/logout/
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+    "refresh": "{{refreshToken}}"
+}
+
+### 8. SUPPRIMER UN UTILISATEUR
+DELETE {{baseUrl}}/delete_profile/1/
+Authorization: Bearer {{accessToken}}
