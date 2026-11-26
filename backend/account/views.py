@@ -13,8 +13,10 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.models import User
 
+from config.permissions import IsAdmin, IsSuperAdmin
 
-# Create your views here.
+
+# creer un compte
 @api_view(["POST"])
 def register_view(request):
     email = request.data.get("email")
@@ -46,7 +48,8 @@ def register_view(request):
             }
         )
         
-        
+
+#se connecter
 @api_view(["POST"])
 def login_view(request):
     email = request.data.get("email")
@@ -99,7 +102,7 @@ def login_view(request):
         status=status.HTTP_401_UNAUTHORIZED
     )
     
-
+# se deconnecter
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def logout_view(request):
@@ -128,7 +131,7 @@ def logout_view(request):
         )
 
 
-
+# mon profile
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def me_view(request):
@@ -165,7 +168,7 @@ def me_view(request):
             status=status.HTTP_404_NOT_FOUND
         )
 
-
+# modifier son profile
 @api_view(["PATCH"])
 @permission_classes([IsAuthenticated])
 def me_update_view(request):
@@ -202,7 +205,8 @@ def me_update_view(request):
             status=status.HTTP_404_NOT_FOUND
         )
 
-
+        
+# token et refresh
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def refresh_view(request):
@@ -213,6 +217,42 @@ def refresh_view(request):
         {
             "refresh": str(refresh),
             "access": str(refresh.access_token),
+        },
+        status=status.HTTP_200_OK
+    )
+
+
+# récuperation de tous les utilsateur
+@api_view(["GET"])
+@permission_classes([IsAuthenticated, IsAdmin])
+def profile_list_view(request):
+
+    profiles = Profile.objects.all()
+
+    serializer = ProfileSerializer(profiles, many=True)
+
+    return Response(serializer.data)
+
+
+# supprimer un utilsateur
+@api_view(["DELETE"])
+@permission_classes([IsAuthenticated, IsSuperAdmin])
+def delete_user_view(request, pk):
+
+    user = get_object_or_404(User, pk=pk)
+
+    # Empêcher la suppression de son propre compte
+    if user == request.user:
+        return Response(
+            {"erreur": "Vous ne pouvez pas supprimer votre propre compte"},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+    user.delete()
+
+    return Response(
+        {
+            "message": "Utilisateur supprimé avec succès"
         },
         status=status.HTTP_200_OK
     )

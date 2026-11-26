@@ -1,49 +1,69 @@
-POST http://127.0.0.1:8000/api/account/register/
+
+@baseUrl = http://127.0.0.1:8000/api/account
+@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzk1Njk4MjU4LCJpYXQiOjE3OTU2OTczNTgsImp0aSI6IjU1Y2Y2NGM0Nzc4MDRhNjY5OTJkMzc0NGExNGU5MTIyIiwidXNlcl9pZCI6IjEifQ.0BzltIwydna60xoxS3pkpFwx1Mr5uZgDqVCC87jDIVI
+@refreshToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc5NjMwMjE1OCwiaWF0IjoxNzk1Njk3MzU4LCJqdGkiOiI5YzFiMWY2ZWYxYzM0ODkzOGYzYzBlMjY2YWNlZTVmYSIsInVzZXJfaWQiOiIxIn0.jfBIbDqk5UQFHKr2gfz2eADGlijbrWc1-Q97Kz6bWms
+
+### 1. INSCRIPTION
+POST {{baseUrl}}/register/
 Content-Type: application/json
 
 {
-    "email":"jean@gmail.com",
-    "password":"123456789",
-    "username":"jean"
+    "username": "jean",
+    "email": "jean@gmail.com",
+    "password": "123456789",
+    "profile": {
+        "fullname": "Jean Niamien"
+    }
 }
 
-
-###
-POST http://127.0.0.1:8000/api/account/login/
+### 2. CONNEXION
+POST {{baseUrl}}/login/
 Content-Type: application/json
 
 {
-    "email":"jean@gmail.com",
-    "password":"123456789"
+    "email": "jean@gmail.com",
+    "password": "123456789"
 }
 
-###
-POST http://127.0.0.1:8000/api/account/logout/
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzk1NjkzOTM0LCJpYXQiOjE3OTU2OTMwMzQsImp0aSI6ImZiN2U0NDdhNmE1MTRiY2Y4MDFlYjFmZTVkOGNmNzg4IiwidXNlcl9pZCI6IjEifQ.3J84CET1bUZk9UK26Y3Nnr7abeRcNmglv-bztpPKO9w
+### 3. CONSULTER SON PROFIL
+GET {{baseUrl}}/me/
+Authorization: Bearer {{accessToken}}
+
+### 4. MODIFIER SON PROFIL
+PATCH {{baseUrl}}/me/update/
+Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 {
-    "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc5NjI5NzgzNCwiaWF0IjoxNzk1NjkzMDM0LCJqdGkiOiI2NWE0MmFkNzliNzM0ZmYwYjlkZWRiOGVkZjkzODI3YiIsInVzZXJfaWQiOiIxIn0.bZPIh0my5DM-4opeAslo_Mn5OSCagENyznxLhChGr9M"
+    "fullname": "Jean Niamien",
+    "phone": "+2250700000000",
+    "country": "Côte d'Ivoire",
+    "city": "Abidjan",
+    "address": "Cocody",
+    "blood": "O_POS"
 }
 
+### 5. CONSULTER LA LISTE DES PROFILS
+GET {{baseUrl}}/profile_list/
+Authorization: Bearer {{accessToken}}
 
-###
-POST http://127.0.0.1:8000/api/account/token/refresh/
+### 6. RENOUVELER LE TOKEN
+POST {{baseUrl}}/token/refresh/
 Content-Type: application/json
 
 {
-    "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc5NTc3ODc2NywiaWF0IjoxNzk1NjkyMzY3LCJqdGkiOiJlODRhNzdlNjg4YzM0ZDFmOTY4Nzk1MmMyMzhiYmM3NiIsInVzZXJfaWQiOiIxIn0.PoUjEMpaJfzS7Tom6MQUP__PbxhzuA7z6qPNuCEARIs"
+    "refresh": "{{refreshToken}}"
 }
 
-###
-GET http://127.0.0.1:8000/api/account/me/
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzk1Njk1NjA1LCJpYXQiOjE3OTU2OTQ3MDUsImp0aSI6Ijk3ODA0ZGRkODQ4NTQzMmM4NzdhNmJhOGMyNzdhMTlhIiwidXNlcl9pZCI6IjEifQ.u9mt-S_DW5T6G098tRwLpWbYMlZN1IYqcz50aDu9uzc
-
-###
-PATCH http://127.0.0.1:8000/api/account/me/update/
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzk1Njk1NjA1LCJpYXQiOjE3OTU2OTQ3MDUsImp0aSI6Ijk3ODA0ZGRkODQ4NTQzMmM4NzdhNmJhOGMyNzdhMTlhIiwidXNlcl9pZCI6IjEifQ.u9mt-S_DW5T6G098tRwLpWbYMlZN1IYqcz50aDu9uzc
+### 7. SE DÉCONNECTER
+POST {{baseUrl}}/logout/
+Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
 {
-    "is_active": False
+    "refresh": "{{refreshToken}}"
 }
+
+### 8. SUPPRIMER UN UTILISATEUR
+DELETE {{baseUrl}}/delete_profile/1/
+Authorization: Bearer {{accessToken}}
