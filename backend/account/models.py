@@ -29,9 +29,9 @@ class Profile(models.Model):
     role = models.CharField(choices=ROLE, default="VICTIM", max_length=10)
     photo = models.ImageField(upload_to='profiles/', blank=True, null=True)
     
-    username = models.CharField(max_length=50)
+    #username = models.CharField(max_length=50)
     fullname = models.CharField(max_length=50)
-    email = models.EmailField(max_length=50)
+    #email = models.EmailField(max_length=50)
     birth_day = models.CharField(max_length=50, null=True, blank=True)
     
     
@@ -44,8 +44,8 @@ class Profile(models.Model):
     diseases = models.CharField(null=True, blank=True, max_length=225)
     traitements = models.CharField(null=True, blank=True, max_length=225)
     
-    created_at = models.DateField(auto_created=True)
-    updated_at = models.DateField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now=True)
+    updated_at = models.DateTimeField(auto_now=True)
     
 
     is_active = models.BooleanField(default=False)
