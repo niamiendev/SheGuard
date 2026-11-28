@@ -4,7 +4,11 @@ from django.contrib.auth.models import User
 from account.models import Disease, Profile, Treatment
 
 class ProfileSerializer(serializers.ModelSerializer):
-    
+    photo = serializers.ImageField(
+        use_url=True,
+        required=False,
+        allow_null=True
+    )
     class Meta:
         
         model = Profile

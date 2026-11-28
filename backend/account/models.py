@@ -92,9 +92,7 @@ class Profile(models.Model):
     role = models.CharField(choices=ROLE, default="VICTIM", max_length=10)
     photo = models.ImageField(upload_to='profiles/', blank=True, null=True)
     
-    #username = models.CharField(max_length=50)
     fullname = models.CharField(max_length=50)
-    #email = models.EmailField(max_length=50)
     birth_day = models.CharField(max_length=50, null=True, blank=True)
     
     
